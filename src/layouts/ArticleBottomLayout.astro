@@ -8,7 +8,7 @@ type Props = {
 // Get the requested entry
 const { entry } = Astro.props
 const { collection } = entry
-const { Content } = await entry.render()
+const { Content, headings } = await entry.render()
 
 // Get the next and prev entries (modulo to wrap index)
 const items = (await getCollection(collection))
@@ -20,9 +20,114 @@ const next = items[(index + 1) % items.length]
 ---
 
 <div>
-  <article>
-    <Content/>
-  </article>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="lg:col-span-9 flex justify-center">
+      <article id="article-root" class="w-full max-w-[720px]">
+      {/* Mobile TOC */}
+      {headings?.length > 0 && (
+        <details class="mb-6 lg:hidden border rounded-lg border-black/15 dark:border-white/20">
+          <summary class="px-4 py-3 cursor-pointer select-none text-sm font-medium">Contents</summary>
+          <nav class="px-4 pb-3">
+            <ul class="space-y-1">
+              {headings
+                .filter((h) => h.depth === 2 || h.depth === 3)
+                .map((h) => (
+                  <li class={`pl-${(h.depth - 2) * 4}`}>
+                    <a href={`#${h.slug}`} class="block py-1 text-sm hover:underline">
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </nav>
+        </details>
+      )}
+      <Content/>
+      </article>
+    </div>
+    {/* Desktop TOC - right column similar to Chirpy */}
+    {headings?.length > 0 && (
+      <aside class="hidden lg:block lg:col-span-3">
+        <div id="toc-panel" class="sticky top-24 z-20 w-full rounded-xl border border-black/10 dark:border-white/15 p-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur max-h-[calc(100vh-7rem)] overflow-auto">
+          <div class="text-xs tracking-wide uppercase mb-3 text-black/70 dark:text-white/70 font-semibold">Contents</div>
+          <nav id="toc-nav">
+            <ul class="space-y-0.5 text-sm">
+              {headings
+                .filter((h) => h.depth === 2 || h.depth === 3)
+                .map((h) => (
+                  <li class={h.depth === 3 ? "pl-4" : ""}> 
+                    <a
+                      href={`#${h.slug}`}
+                      data-toc-id={h.slug}
+                      class="block py-1.5 px-2 rounded hover:bg-black/5 hover:dark:bg-white/10 transition-colors border-l-2 border-transparent text-black/70 dark:text-white/70"
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </nav>
+          <script is:inline>
+            (function() {
+              const tocId = 'toc-nav-' + Math.random().toString(36).substr(2, 9);
+              const nav = document.getElementById('toc-nav');
+              if (!nav) return;
+              nav.id = tocId;
+              
+              const links = Array.from(nav.querySelectorAll('a[data-toc-id]'));
+              const targets = links
+                .map((a) => {
+                  const id = a.getAttribute('data-toc-id');
+                  return document.getElementById(id);
+                })
+                .filter(Boolean);
+              
+              if (targets.length === 0) return;
+              
+              const setActive = (id) => {
+                links.forEach((a) => {
+                  const isActive = a.getAttribute('data-toc-id') === id;
+                  if (isActive) {
+                    a.classList.add('text-black', 'dark:text-white', 'font-medium');
+                    a.classList.add('border-black', 'dark:border-white');
+                    a.classList.remove('text-black/70', 'dark:text-white/70');
+                    a.classList.remove('border-transparent');
+                  } else {
+                    a.classList.remove('text-black', 'dark:text-white', 'font-medium');
+                    a.classList.remove('border-black', 'dark:border-white');
+                    a.classList.add('text-black/70', 'dark:text-white/70');
+                    a.classList.add('border-transparent');
+                  }
+                });
+              };
+              
+              // IntersectionObserver + nearest-to-top fallback for robust highlighting
+              const HEADER_OFFSET = 80; // approximate header height
+              const observer = new IntersectionObserver(() => {
+                const candidates = targets.map((el) => ({ id: el.id, top: el.getBoundingClientRect().top - HEADER_OFFSET }));
+                let best = candidates[0];
+                for (const c of candidates) if (Math.abs(c.top) < Math.abs(best.top)) best = c;
+                if (best) setActive(best.id);
+              }, { rootMargin: '-10% 0px -80% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+              
+              targets.forEach((el) => observer.observe(el));
+              
+              // Set initial active state
+              const firstVisible = targets.find(el => {
+                const rect = el.getBoundingClientRect();
+                return rect.top >= 0 && rect.top < window.innerHeight * 0.5;
+              });
+              if (firstVisible) {
+                setActive(firstVisible.id);
+              } else if (targets[0]) {
+                setActive(targets[0].id);
+              }
+            })();
+          </script>
+        </div>
+      </aside>
+    )}
+  </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <a href={`/${prev.collection}/${prev.slug}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 blend">
       <div class="order-2 w-full h-full group-hover:text-black group-hover:dark:text-white blend">

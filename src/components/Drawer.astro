@@ -5,14 +5,19 @@ const { pathname } = Astro.url
 const subpath = pathname.match(/[^/]+/g)
 ---
 
-<div id="drawer" class="fixed inset-0 h-0 z-40 overflow-hidden flex flex-col items-center justify-center md:hidden bg-neutral-100 dark:bg-neutral-900 transition-[height] duration-300 ease-in-out">
-  <nav class="flex flex-col items-center space-y-2">
+<div id="drawer" class="fixed inset-0 h-0 z-[60] overflow-hidden flex flex-col items-center justify-center bg-white/95 dark:bg-black/95 transition-[height] duration-300 ease-in-out backdrop-blur-sm">
+  <nav class="flex flex-col items-center space-y-4">
     {
-      LINKS.map((LINK) => (
-        <a href={LINK.HREF} class={cn("flex items-center justify-center px-3 py-1 rounded-full", "text-current hover:text-black dark:hover:text-white", "hover:bg-black/5 dark:hover:bg-white/20", "transition-colors duration-300 ease-in-out", pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF ? "pointer-events-none bg-black dark:bg-white text-white dark:text-black" : "")}>
-          {LINK.TEXT}
-        </a>
-      ))
+      LINKS.map((LINK) => {
+        const href = LINK.TEXT === "datumint" && import.meta.env.DEV 
+          ? "http://localhost:4322/" 
+          : LINK.HREF;
+        return (
+          <a href={href} target={LINK.TEXT === "datumint" ? "_blank" : undefined} rel={LINK.TEXT === "datumint" ? "noopener noreferrer" : undefined} class={cn("flex items-center justify-center px-6 py-3 rounded-full text-lg font-semibold", "text-current hover:text-black dark:hover:text-white", "hover:bg-black/5 dark:hover:bg-white/20", "transition-colors duration-300 ease-in-out", pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF ? "pointer-events-none bg-black dark:bg-white text-white dark:text-black" : "")}>
+            {LINK.TEXT}
+          </a>
+        );
+      })
     }
   </nav>
 
@@ -45,3 +50,49 @@ const subpath = pathname.match(/[^/]+/g)
     @apply h-full;
   }
 </style>
+
+<script is:inline>
+  function closeDrawerOnLinkClick() {
+    const drawer = document.getElementById("drawer")
+    const drawerButton = document.getElementById("header-drawer-button")
+    const headerNav = document.getElementById("header-nav")
+    const headerButtons = document.getElementById("header-buttons")
+    const drawerLinks = drawer?.querySelectorAll("a")
+    
+    drawerLinks?.forEach((link) => {
+      link.addEventListener("click", () => {
+        drawer?.classList.remove("open")
+        drawerButton?.classList.remove("open")
+        // Restore navigation visibility
+        headerNav?.classList.remove("drawer-open")
+        headerButtons?.classList.remove("drawer-open")
+      })
+    })
+  }
+
+  function closeDrawerOnOutsideClick() {
+    const drawer = document.getElementById("drawer")
+    const drawerButton = document.getElementById("header-drawer-button")
+    const headerNav = document.getElementById("header-nav")
+    const headerButtons = document.getElementById("header-buttons")
+    
+    drawer?.addEventListener("click", (e) => {
+      // If clicking on the drawer background (not the nav or buttons)
+      if (e.target === drawer) {
+        drawer.classList.remove("open")
+        drawerButton?.classList.remove("open")
+        // Restore navigation visibility
+        headerNav?.classList.remove("drawer-open")
+        headerButtons?.classList.remove("drawer-open")
+      }
+    })
+  }
+
+  function initializeDrawerClose() {
+    closeDrawerOnLinkClick()
+    closeDrawerOnOutsideClick()
+  }
+
+  document.addEventListener("astro:after-swap", initializeDrawerClose)
+  initializeDrawerClose()
+</script>

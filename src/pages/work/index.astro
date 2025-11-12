@@ -37,16 +37,16 @@ function formatWorkDate(input: Date | string) {
   <BottomLayout>
     <ul>
       { 
-        work.map((entry) => (
+        work.filter(entry => entry.data.company !== 'IIIT Allahabad, India').map((entry, idx) => (
           <li class="animate border-b border-black/10 dark:border-white/25 mt-4 py-8 first-of-type:mt-0 first-of-type:pt-0 last-of-type:border-none">
-            <div class="text-sm uppercase mb-4">
-              {formatWorkDate(entry.data.dateStart)} - {formatWorkDate(entry.data.dateEnd)}
+            <div class="text-black dark:text-white font-semibold text-lg mb-1">
+              {entry.data.role}
             </div>
-            <div class="text-black dark:text-white font-semibold">
+            <div class="text-base text-gray-700 dark:text-gray-300 mb-2">
               {entry.data.company}
             </div>
-            <div class="text-sm font-semibold">
-              {entry.data.role}
+            <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
+              {idx === 0 && '2021-2024'}{idx === 1 && '2017-2021'}{idx === 2 && '2010-2017'}
             </div>
             <article class="prose dark:prose-invert">
               <entry.Content />

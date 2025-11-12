@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const projects = [
+  {
+    org: "Industrial Coatings / EU Pilot",
+    title: "Unified materials knowledge graph for predictive corrosion analytics",
+    desc:
+      "Ontology-driven platform linking lab tests, formulation data, and corrosion outcomes. Enabled semantic queries and future GenAI assistants for materials R&D.",
+    tags: ["Knowledge Graph", "Semantic Search", "AI Readiness"],
+  },
+  {
+    org: "Manufacturing Line / Compliance",
+    title: "FAIR telemetry pipeline with full traceability",
+    desc:
+      "Time-series ingestion, metadata capture, and lineage. Reduced weekly compliance reporting from ~10 hours to realtime dashboard + exported PDF.",
+    tags: ["FAIR", "Lineage", "Auditability"],
+  },
+  {
+    org: "Internal R&D / GenAI",
+    title: "Governed Q&A assistant for engineers",
+    desc:
+      "LLM assistant constrained to approved sources, including structured semantic entities. Every answer cites where it came from.",
+    tags: ["GenAI with Context", "Retrieval", "Compliance"],
+  },
+];
+---
+
+<BaseLayout
+  title="Projects — DatumInt"
+  description="Examples of semantic data engineering work."
+>
+  <section class="section">
+    <div class="wrap" style="max-width:800px;">
+      <h1>Projects</h1>
+      <p>
+        A few representative deliveries (anonymised). These are the style of
+        outcomes you can expect from a pilot with us.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="display:grid;gap:1.5rem;">
+      {projects.map(p => (
+        <ProjectCard {...p} />
+      ))}
+    </div>
+  </section>
+
+  <section class="section-alt">
+    <div class="wrap" style="text-align:center;">
+      <h2>Want something like this?</h2>
+      <p style="margin:0 auto 1.5rem;max-width:60ch;">
+        We normally start with an Assessment Sprint → Pilot Build → Handover.
+      </p>
+      <a href="/contact" class="btn-solid" style="text-decoration:none;">
+        Book an Assessment Sprint
+      </a>
+    </div>
+  </section>
+</BaseLayout>

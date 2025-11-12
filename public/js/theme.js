@@ -54,8 +54,12 @@ window.onload = () => {
   function initializeThemeButtons() {
     const headerThemeButton = document.getElementById("header-theme-button")
     const drawerThemeButton = document.getElementById("drawer-theme-button")
+    const sidebarThemeButton = document.getElementById("sidebar-theme-button")
+    const contentHeaderThemeButton = document.getElementById("content-header-theme-button")
     headerThemeButton?.addEventListener("click", changeTheme)
     drawerThemeButton?.addEventListener("click", changeTheme)
+    sidebarThemeButton?.addEventListener("click", changeTheme)
+    contentHeaderThemeButton?.addEventListener("click", changeTheme)
   } 
   
   document.addEventListener("astro:after-swap", initializeThemeButtons)

@@ -6,42 +6,42 @@ const subpath = pathname.match(/[^/]+/g)
 import Container from "@components/Container.astro"
 ---
 
-<header id="header" class="fixed top-0 w-full h-16 z-50 ">
+<header id="header" class="fixed top-0 w-full h-16 z-50 pt-16 ">
   <Container size="md">
     <div class="relative h-full w-full">
-      <div class="absolute left-0 top-1/2 -translate-y-1/2 flex gap-1 font-semibold">
-        <a href="/" class="flex gap-1 text-current hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
-          <svg class="size-6 fill-current">
-            <use href="/brand.svg#brand"></use>
-          </svg>
-          <div>
-            {SITE.TITLE}
+      <div class="absolute left-0 top-1/2 -translate-y-1/2 flex gap-4 items-center font-semibold">
+        <a href="/" class="flex gap-2 items-center text-current hover:text-black dark:hover:text-white transition-colors duration-300 ease-in-out">
+          <div class="whitespace-nowrap flex items-center" aria-label="Vinay Home">
+            <svg width="130" height="36" viewBox="0 0 130 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-9 vinay-logo-svg">
+              <text x="0" y="28" font-family="'Fira Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace" font-size="32" font-weight="900" fill="#2563eb" class="vinay-logo-prompt">&gt;</text>
+              <text x="28" y="28" font-family="'Inter', 'Atkinson', Arial, sans-serif" font-size="30" font-weight="900" fill="#22223b" letter-spacing="2" class="vinay-logo-name">Vinay</text>
+            </svg>
           </div>
         </a>
       </div>
+      
 
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-      <nav class="hidden md:flex items-center justify-center text-sm gap-1">
+    <div id="header-nav" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <nav class="hidden md:flex items-center justify-center text-sm gap-6 ml-16 pr-10">
         {
-          LINKS.map((LINK) => (
-            <a href={LINK.HREF} class={cn("h-8 rounded-full px-3 text-current", "flex items-center justify-center", "transition-colors duration-300 ease-in-out", pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF ? "bg-black dark:bg-white text-white dark:text-black" : "hover:bg-black/5 dark:hover:bg-white/20 hover:text-black dark:hover:text-white")}>
-              {LINK.TEXT}
-            </a>
-          ))
+          LINKS.map((LINK) => {
+            const href = LINK.TEXT === "datumint" && import.meta.env.DEV 
+              ? "http://localhost:4322/" 
+              : LINK.HREF;
+            return (
+              <a href={href} target={LINK.TEXT === "datumint" ? "_blank" : undefined} rel={LINK.TEXT === "datumint" ? "noopener noreferrer" : undefined} class={cn("h-8 rounded-full px-3 text-current font-semibold", "flex items-center justify-center", "transition-colors duration-300 ease-in-out", pathname === LINK.HREF || "/" + subpath?.[0] === LINK.HREF ? "bg-black dark:bg-white text-white dark:text-black" : "hover:bg-black/5 dark:hover:bg-white/20 hover:text-black dark:hover:text-white")}>
+                {LINK.TEXT}
+              </a>
+            );
+          })
         }
       </nav>
     </div>
 
-    <div class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
+    <div id="header-buttons" class="buttons absolute right-0 top-1/2 -translate-y-1/2 flex gap-1">
       <a href="/search" aria-label={`Search blog posts and projects on ${SITE.TITLE}`} class={cn("hidden md:flex", "size-9 rounded-full p-2 items-center justify-center", "bg-transparent hover:bg-black/5 dark:hover:bg-white/20", "stroke-current hover:stroke-black hover:dark:stroke-white", "border border-black/10 dark:border-white/25", "transition-colors duration-300 ease-in-out", pathname === "/search" || "/" + subpath?.[0] === "/search" ? "pointer-events-none bg-black dark:bg-white text-white dark:text-black" : "")}>
         <svg class="size-full">
           <use href="/ui.svg#search"></use>
-        </svg>
-      </a>
-
-      <a href="/rss.xml" target="_blank" aria-label={`Rss feed for ${SITE.TITLE}`} class={cn("hidden md:flex", "size-9 rounded-full p-2 items-center justify-center", "bg-transparent hover:bg-black/5 dark:hover:bg-white/20", "stroke-current hover:stroke-black hover:dark:stroke-white", "border border-black/10 dark:border-white/25", "transition-colors duration-300 ease-in-out")}>
-        <svg class="size-full">
-          <use href="/ui.svg#rss"></use>
         </svg>
       </a>
 
@@ -54,7 +54,7 @@ import Container from "@components/Container.astro"
         </svg>
       </button>
 
-      <button id="header-drawer-button" aria-label={`Toggle drawer open and closed`} class={cn("flex md:hidden", "size-9 rounded-full p-2 items-center justify-center", "bg-transparent hover:bg-black/5 dark:hover:bg-white/20", "stroke-current hover:stroke-black hover:dark:stroke-white", "border border-black/10 dark:border-white/25", "transition-colors duration-300 ease-in-out")}>
+      <button id="header-drawer-button" aria-label={`Toggle drawer open and closed`} class={cn("flex", "size-9 rounded-full p-2 items-center justify-center", "bg-transparent hover:bg-black/5 dark:hover:bg-white/20", "stroke-current hover:stroke-black hover:dark:stroke-white", "border border-black/10 dark:border-white/25", "transition-colors duration-300 ease-in-out", "z-[70] relative")}>
         <svg id="drawer-open" class="size-full">
           <use href="/ui.svg#menu"></use>
         </svg>
@@ -83,14 +83,38 @@ import Container from "@components/Container.astro"
   #header-drawer-button.open > #drawer-close {
     @apply block;
   }
+
+  .vinay-logo-svg .vinay-logo-name { transition: fill 0.2s; }
+  html.dark .vinay-logo-svg .vinay-logo-name { fill: #f8fafc; }
+
+  /* Hide navigation when drawer is open */
+  #header-nav.drawer-open {
+    @apply hidden;
+  }
+
+  #header-buttons.drawer-open > *:not(#header-drawer-button) {
+    @apply hidden;
+  }
 </style>
 
 <script is:inline>
   function toggleDrawer() {
     const drawer = document.getElementById("drawer")
     const drawerButton = document.getElementById("header-drawer-button")
+    const headerNav = document.getElementById("header-nav")
+    const headerButtons = document.getElementById("header-buttons")
+    
     drawer?.classList.toggle("open")
     drawerButton?.classList.toggle("open")
+    
+    // Hide/show navigation elements
+    if (drawer?.classList.contains("open")) {
+      headerNav?.classList.add("drawer-open")
+      headerButtons?.classList.add("drawer-open")
+    } else {
+      headerNav?.classList.remove("drawer-open")
+      headerButtons?.classList.remove("drawer-open")
+    }
   }
 
   function initializeDrawerButton() {

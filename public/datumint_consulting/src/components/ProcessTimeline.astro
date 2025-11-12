@@ -1,0 +1,185 @@
+---
+interface Step {
+  number: number;
+  title: string;
+  description: string;
+  duration?: string;
+  deliverables?: string[];
+}
+
+interface Props {
+  steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<section class="process-timeline">
+  <div class="wrap">
+    <div class="timeline-container">
+      {steps.map((step, index) => (
+        <div class="timeline-step" data-step={step.number}>
+          <div class="step-marker">
+            <span class="step-number">{step.number}</span>
+          </div>
+          <div class="step-content">
+            <div class="step-header">
+              <h3 class="step-title">{step.title}</h3>
+              {step.duration && (
+                <span class="step-duration">{step.duration}</span>
+              )}
+            </div>
+            <p class="step-description">{step.description}</p>
+            {step.deliverables && step.deliverables.length > 0 && (
+              <ul class="step-deliverables">
+                {step.deliverables.map((deliverable) => (
+                  <li>{deliverable}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {index < steps.length - 1 && <div class="step-connector"></div>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-timeline {
+    padding: 3rem 0;
+  }
+
+  .timeline-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .timeline-step {
+    position: relative;
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    align-items: flex-start;
+  }
+
+  .step-marker {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .step-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+  }
+
+  .step-content {
+    flex: 1;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+  }
+
+  .step-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-main);
+  }
+
+  .step-duration {
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .step-description {
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .step-deliverables {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .step-deliverables li {
+    padding: 0.25rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .step-deliverables li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-tertiary);
+    font-weight: 600;
+  }
+
+  .step-connector {
+    position: absolute;
+    left: 29px;
+    top: 60px;
+    width: 2px;
+    height: calc(100% + 1rem);
+    background: linear-gradient(to bottom, var(--accent-primary), transparent);
+    opacity: 0.3;
+  }
+
+  .timeline-step:last-child .step-connector {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .timeline-step {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .step-marker {
+      width: 50px;
+      height: 50px;
+    }
+
+    .step-number {
+      font-size: 1.25rem;
+    }
+
+    .step-connector {
+      left: 24px;
+      top: 50px;
+    }
+
+    .step-header {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+</style>
+

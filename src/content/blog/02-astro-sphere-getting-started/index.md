@@ -1,5 +1,5 @@
 ---
-title: "Astro Sphere: Getting Started"
+title: "Astro Sphere: Getting Started with the blogging"
 summary: "You've downloaded and installed the project. Let's hit the ground running."
 date: "Mar 16 2024"
 draft: false

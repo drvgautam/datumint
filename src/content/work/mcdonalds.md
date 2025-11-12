@@ -1,11 +1,9 @@
 ---
-company: "McDonalds"
-role: "French Fryer"
-dateStart: "03/16/2018"
-dateEnd: "07/01/2019"
+company: "IIIT Allahabad, India"
+role: "Research Assistant and Programmer"
+dateStart: "06/01/2009"
+dateEnd: "03/31/2010"
 ---
 
-Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure illo neque tempora, voluptatem est quaerat voluptas praesentium ipsa dolorem dignissimos nulla ratione distinctio quae maiores eligendi nostrum? Quibusdam, debitis voluptatum.
-
-- Quibusdam, debitis voluptatum.
-- amet consectetur adipisicing elit. Iure illo neque tempora.
+- Developed FPGA-based smart power meters and wireless sensor networks, optimizing power usage monitoring.
+- Designed and implemented data integration protocols for sensor networks.

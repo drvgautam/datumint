@@ -1,0 +1,112 @@
+---
+import "../styles/theme.css"; // this pulls in the coffee palette + layout styles
+import AcademyBadge from "../components/AcademyBadge.astro";
+import Logo from "../components/Logo.astro";
+const {
+  title = "DatumInt — Semantic Data Engineering",
+  description = "Semantic data platforms, FAIR data pipelines, and GenAI with context.",
+} = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="DatumInt / Semantic Data Engineering RSS"
+      href="/rss.xml"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/theme.css" />
+  </head>
+  <body>
+    <header style="padding:1rem 0;">
+      <div
+        class="wrap"
+        style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;"
+      >
+        <a
+          href="/"
+          style="display:flex;align-items:center;text-decoration:none;line-height:1;"
+          aria-label="DatumInt Home"
+        >
+          <Logo />
+        </a>
+
+        <nav
+          style="display:flex;flex-wrap:wrap;gap:1rem;font-size:.9rem;align-items:center;"
+        >
+          <a href="/services" style="color:var(--text-main);text-decoration:none;">Services</a>
+          <a href="/projects" style="color:var(--text-main);text-decoration:none;">Projects</a>
+          <a href="/blog" style="color:var(--text-main);text-decoration:none;">Blog</a>
+          <a href="/about" style="color:var(--text-main);text-decoration:none;">About</a>
+          <a href="/contact" style="color:var(--text-main);text-decoration:none;">Contact</a>
+          <a href="/careers" class="btn-solid" style="text-decoration:none;">Careers</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer style="background-color:var(--bg-page);padding-top:3rem;">
+      <div class="wrap footer-cols">
+        <div>
+          <h4 style="margin-bottom:.5rem;">DatumInt</h4>
+          <p style="margin:0 0 .25rem;color:var(--text-muted);font-size:.9rem;">
+            Trondheim, Norway
+          </p>
+          <p style="margin:0 0 .25rem;color:var(--text-muted);font-size:.9rem;">
+            Semantic Data Engineering
+          </p>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom:.5rem;">Contact</h4>
+          <p style="margin:0 0 .5rem;color:var(--text-muted);font-size:.9rem;">
+            ✉ contact@datumint.no
+          </p>
+          <p style="margin:0 0 .5rem;color:var(--text-muted);font-size:.9rem;">
+            🔗 LinkedIn (coming soon)
+          </p>
+          <p style="margin:0 0 .5rem;color:var(--text-muted);font-size:.9rem;">
+            💻 github.com/drvgautam
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-meta">
+        © {new Date().getFullYear()} DatumInt. All rights reserved.
+      </div>
+    </footer>
+    <AcademyBadge />
+    <script is:inline>
+      // Scroll animations using Intersection Observer
+      document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('fade-in-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+      });
+    </script>
+  </body>
+</html>

@@ -1,12 +1,11 @@
 ---
-company: "Google"
-role: "Staff Software Engineer"
-dateStart: "11/27/2022"
-dateEnd: "Now"
+company: "Aalto University, Finland"
+role: "Postdoctoral Research Fellow"
+dateStart: "10/01/2017"
+dateEnd: "09/30/2021"
 ---
 
-Sit amet consectetur adipisicing elit. Iure illo neque tempora, voluptatem est quaerat voluptas praesentium ipsa dolorem dignissimos nulla ratione distinctio quae maiores eligendi nostrum? Quibusdam, debitis voluptatum, lorem ipsum dolor.
-
-- Aadipisicing elit. Iure illo neque tempora, voluptatem est.
-- dolorem dignissimos nulla ratione.
-- Quibusdam, debitis voluptatum, lorem ipsum dolor.
+- Developed algorithms to model assembly processes of biomolecular structures
+- Developed an open-source Python app: [XDSD](#)
+- Co-supervised master's students on algorithmic design and development of simulation models.
+- Contributed to research publications and presented findings at international conferences.

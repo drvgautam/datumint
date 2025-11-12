@@ -2,9 +2,9 @@ import type { Site, Page, Links, Socials } from "@types"
 
 // Global
 export const SITE: Site = {
-  TITLE: "Astro Sphere",
-  DESCRIPTION: "Welcome to Astro Sphere, a portfolio and blog for designers and developers.",
-  AUTHOR: "Mark Horn",
+  TITLE: "Vinay Gautam",
+  DESCRIPTION: "PhD in Computer Science | Software Developer | Data Engineer | Cloud Focussed | ML & AI Enthusiast. Personal notes, scripts, and projects on Linux, DevOps, semantic data engineering, and context-aware GenAI.",
+  AUTHOR: "Vinay Gautam",
 }
 
 // Work Page
@@ -31,6 +31,9 @@ export const SEARCH: Page = {
   DESCRIPTION: "Search all posts and projects by keyword.",
 }
 
+// Optional support link; leave empty string to hide
+export const BUY_ME_COFFEE_URL = "https://buymeacoffee.com/datumint"
+
 // Links
 export const LINKS: Links = [
   { 
@@ -49,33 +52,53 @@ export const LINKS: Links = [
     TEXT: "Projects", 
     HREF: "/projects", 
   },
+  {
+    TEXT: "datumint",
+    HREF: "/datumint_consulting/index.html",
+  },
+  { 
+    TEXT: "Contact", 
+    HREF: "/contact", 
+  },
 ]
 
 // Socials
 export const SOCIALS: Socials = [
   { 
-    NAME: "Email",
-    ICON: "email", 
-    TEXT: "markhorn.dev@gmail.com",
-    HREF: "mailto:markhorn.dev@gmail.com",
+    NAME: "LinkedIn",
+    ICON: "linkedin",
+    TEXT: "https://www.linkedin.com/in/vinaygautam/",
+    HREF: "https://www.linkedin.com/in/vinaygautam/",
   },
   { 
     NAME: "Github",
     ICON: "github",
-    TEXT: "markhorn-dev",
-    HREF: "https://github.com/markhorn-dev/astro-sphere"
+    TEXT: "https://github.com/drvgautam",
+    HREF: "https://github.com/drvgautam"
+  },
+  // {
+  //   NAME: "Hashnode",
+  //   ICON: "hashnode",
+  //   TEXT: "https://hashnode.com/@drvgautam",
+  //   HREF: "https://hashnode.com/@drvgautam"
+  // },
+  {
+    NAME: "Medium",
+    ICON: "medium",
+    TEXT: "https://medium.com/@vkg.biet",
+    HREF: "https://medium.com/@vkg.biet"
   },
   { 
-    NAME: "LinkedIn",
-    ICON: "linkedin",
-    TEXT: "markhorn-dev",
-    HREF: "https://www.linkedin.com/in/markhorn-dev/",
-  },
-  { 
-    NAME: "Twitter",
+    NAME: "X",
     ICON: "twitter-x",
-    TEXT: "markhorn_dev",
-    HREF: "https://twitter.com/markhorn_dev",
+    TEXT: "https://twitter.com/vinaygautam",
+    HREF: "https://twitter.com/vinaygautam",
+  },
+  {
+    NAME: "Substack",
+    ICON: "substack",
+    TEXT: "https://substack.com/@drvgautam",
+    HREF: "https://substack.com/@drvgautam"
   },
 ]
 

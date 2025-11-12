@@ -1,0 +1,70 @@
+---
+import PageLayout from "@layouts/PageLayout.astro"
+---
+
+<PageLayout title="Contact" description="Get in touch with Vinay Gautam for projects, collaborations, or just to say hi!">
+  <div class="max-w-[720px] mx-auto py-8 px-4 md:px-8 space-y-14">
+    <div class="space-y-6">
+      <h1 class="text-3xl font-bold mb-2 page-heading text-left">Get in touch</h1>
+      <p class="text-base text-gray-700 dark:text-gray-200">
+        Let's connect if you have a project, ideas to discuss, or just want to chat!
+      </p>
+      <p class="text-base text-gray-600 dark:text-gray-400">
+        Feel free to reach out to me at <a href="mailto:vkg.biet@gmail.com" class="text-purple-600 font-semibold underline">vkg.biet@gmail.com</a> or through the contact form below.
+      </p>
+    </div>
+    <div class="flex-1 min-w-[220px]">
+      <form class="bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 p-8 flex flex-col gap-4 max-w-2xl mx-auto" autocomplete="off">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-1">
+            <label for="name" class="block text-base font-semibold mb-2">NAME</label>
+            <input id="name" name="name" type="text" required placeholder="Enter your name" class="w-full px-4 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-base" />
+          </div>
+          <div class="flex-1">
+            <label for="email" class="block text-base font-semibold mb-2">EMAIL</label>
+            <input id="email" name="email" type="email" required placeholder="Enter your email" class="w-full px-4 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-base" />
+          </div>
+        </div>
+        <div>
+          <label for="message" class="block text-base font-semibold mb-2">MESSAGE</label>
+          <textarea id="message" name="message" required rows="5" placeholder="Enter your message..." class="w-full px-4 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-base"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2 rounded bg-black dark:bg-white text-white dark:text-black font-semibold hover:opacity-90 transition text-base mt-2">Contact me</button>
+        <p class="text-sm text-gray-500 mt-2">By submitting this form, I agree to the <a href="/legal/privacy" class="font-semibold underline">privacy policy</a>.</p>
+      </form>
+    </div>
+    <div class="text-center space-y-6">
+      <hr class="my-6 border-t border-gray-200 dark:border-gray-700" />
+      <div class="space-y-3">
+        <p class="font-semibold text-lg text-gray-900 dark:text-gray-100">Interested to chat on your ideas or work with me?</p>
+        <p class="text-base text-gray-600 dark:text-gray-400">Schedule a meeting at your convenience</p>
+      </div>
+      <a 
+        href="https://calendly.com/vkg-biet" 
+        target="_blank" 
+        rel="noopener" 
+        class="group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-500 dark:to-blue-500 text-white font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 hover:from-purple-700 hover:to-blue-700 dark:hover:from-purple-600 dark:hover:to-blue-600"
+      >
+        <svg class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Book a meeting</span>
+        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+    <div id="newsletter" class="bg-white dark:bg-gray-900 rounded-2xl shadow border border-gray-100 dark:border-gray-800 p-8 flex flex-col gap-4 max-w-2xl mx-auto">
+      <h2 class="text-xl font-bold mb-3">Subscribe to my newsletter</h2>
+      <p class="text-base mb-4 text-gray-700 dark:text-gray-300">Get recent projects & blog updates to your inbox.</p>
+      <form class="flex flex-col md:flex-row gap-2" autocomplete="off">
+        <div class="flex-1">
+          <label for="newsletter-email" class="block text-base font-semibold mb-1">EMAIL</label>
+          <input id="newsletter-email" name="email" type="email" required placeholder="Enter your email..." class="w-full px-4 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-base" />
+        </div>
+        <button type="submit" class="w-full md:w-auto py-2 px-6 rounded bg-black dark:bg-white text-white dark:text-black font-semibold hover:opacity-90 transition text-base">Subscribe</button>
+      </form>
+      <p class="text-sm text-gray-500 mt-2">I never share your email. Read our <a href="/legal/privacy" class="font-semibold underline">privacy policy</a>.</p>
+    </div>
+  </div>
+</PageLayout> 

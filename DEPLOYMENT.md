@@ -105,29 +105,66 @@ The `.cloudflare/pages.json` file has been created with the correct settings.
    - Enter: `vinaygautam.com`
    - Click **"Continue"**
 
-2. **DNS Configuration**
-   - Cloudflare will provide DNS records to add
-   - If your domain is already on Cloudflare:
-     - The DNS records will be automatically configured
-   - If your domain is on another registrar:
-     - Add a CNAME record:
-       - **Type**: CNAME
-       - **Name**: `@` (or root domain)
-       - **Target**: `vinaygautam-portfolio.pages.dev` (or the provided Pages URL)
-       - **TTL**: Auto
-     - For `www` subdomain:
-       - **Type**: CNAME
-       - **Name**: `www`
-       - **Target**: `vinaygautam-portfolio.pages.dev`
-       - **TTL**: Auto
+2. **Domain Transfer Prompt (IMPORTANT)**
+   - Cloudflare may ask: **"Transfer domain to Cloudflare"** or **"Add site to Cloudflare"**
+   - **You have two options:**
+   
+   **Option A: Use Cloudflare DNS Only (Recommended)**
+   - Click **"Add site"** or **"Skip transfer"** or **"Use DNS only"**
+   - This keeps your domain at your current registrar
+   - You'll just use Cloudflare's DNS servers
+   - Go to Cloudflare Dashboard → **"Websites"** → **"Add a site"**
+   - Enter `vinaygautam.com` and select **"Free"** plan
+   - Cloudflare will scan your DNS and provide nameservers
+   - **Update nameservers at your registrar** (see Step 4.2 below)
+   
+   **Option B: Full Domain Transfer (Optional)**
+   - Only choose this if you want Cloudflare to be your domain registrar
+   - This is **NOT required** for Cloudflare Pages to work
+   - You can transfer later if needed
 
-3. **SSL/TLS Configuration**
-   - Cloudflare automatically provisions SSL certificates
-   - Go to **SSL/TLS** → **Overview**
-   - Ensure it's set to **"Full"** or **"Full (strict)"**
-   - Wait for SSL certificate to be issued (usually a few minutes)
+3. **DNS Configuration**
+   - If your domain is **already on Cloudflare**:
+     - DNS records will be automatically configured
+     - Skip to Step 4.3
+   - If your domain is **on another registrar**:
+     - After adding site to Cloudflare, you'll get nameservers
+     - Update nameservers at your registrar (see Step 4.2 below)
+     - Cloudflare will auto-configure DNS records for Pages
 
-### 4.2 Verify Domain Setup
+### 4.2 Update Nameservers at Your Registrar (If Using DNS Only)
+
+**Only needed if your domain is NOT already on Cloudflare:**
+
+1. **Get Cloudflare Nameservers**
+   - After adding site to Cloudflare, you'll see nameservers like:
+     ```
+     ns1.cloudflare.com
+     ns2.cloudflare.com
+     ```
+   - These are shown in Cloudflare Dashboard → Your site → **"Overview"**
+
+2. **Go to Your Domain Registrar**
+   - Log in to where you bought `vinaygautam.com`
+   - Common registrars: Namecheap, GoDaddy, Google Domains, etc.
+
+3. **Update Nameservers**
+   - Find **"DNS Management"** or **"Nameservers"** section
+   - Replace current nameservers with Cloudflare's nameservers
+   - Save changes
+
+4. **Wait for DNS Propagation**
+   - Can take 24-48 hours (usually much faster, often within minutes)
+   - Check status in Cloudflare dashboard
+
+### 4.3 SSL/TLS Configuration
+
+1. **In Cloudflare Dashboard** → Your site → **"SSL/TLS"**
+2. **Set encryption mode to "Full"** or **"Full (strict)"**
+3. Cloudflare automatically provisions SSL certificates
+4. Wait for SSL certificate to be issued (usually a few minutes)
+
+### 4.4 Verify Domain Setup
 
 1. **Check DNS Propagation**
    ```bash

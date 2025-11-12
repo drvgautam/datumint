@@ -28,7 +28,15 @@ git push origin main
 1. In your project → **"Custom domains"** tab
 2. Click **"Set up a custom domain"**
 3. Enter: `vinaygautam.com`
-4. DNS will auto-configure if domain is on Cloudflare
+4. **When prompted about domain transfer:**
+   - Choose **"Add site"** or **"Use DNS only"** (recommended)
+   - This keeps your domain at your current registrar
+   - You'll just use Cloudflare's DNS servers
+5. **If domain is not on Cloudflare:**
+   - Go to Cloudflare Dashboard → **"Websites"** → **"Add a site"**
+   - Enter `vinaygautam.com` → Select **"Free"** plan
+   - Update nameservers at your registrar (Cloudflare will show you the nameservers)
+6. **DNS will auto-configure** once nameservers are updated
 
 ### 4. Verify Deployment
 

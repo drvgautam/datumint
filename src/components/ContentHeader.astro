@@ -5,8 +5,8 @@ const { pathname } = Astro.url
 const subpath = pathname.match(/[^/]+/g)
 ---
 
-<header class="sticky top-0 z-30 bg-white/95 dark:bg-black/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 ml-64">
-  <div class="max-w-[720px] mx-auto px-4 py-3 flex justify-end items-center gap-2">
+<header class="sticky top-0 z-30 bg-white/95 dark:bg-black/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 lg:ml-64 lg:top-0 top-[64px]">
+  <div class="max-w-[720px] mx-auto px-4 py-3 flex justify-end items-center gap-2 lg:px-4">
     <a 
       href="/search" 
       aria-label={`Search blog posts and projects on ${SITE.TITLE}`} 

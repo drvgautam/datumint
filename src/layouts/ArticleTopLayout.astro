@@ -26,7 +26,7 @@ const repoUrl = collection === "projects" ? data.repoUrl : null
           Back to {collection}
         </div>
       </a>
-      <div class="flex flex-wrap text-sm uppercase mt-12 gap-3 opacity-75">
+      <div class="flex flex-wrap text-xs sm:text-sm uppercase mt-8 sm:mt-12 gap-3 opacity-75">
         <div class="flex items-center gap-2">
           <svg class="size-5 stroke-current">
             <use href="/ui.svg#calendar"/>
@@ -40,10 +40,10 @@ const repoUrl = collection === "projects" ? data.repoUrl : null
           {readingTime(body)}
         </div>
       </div>
-      <h1 class="text-3xl font-semibold text-black dark:text-white mt-2">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-black dark:text-white mt-2">
         {title}
       </h1>
-      <div class="mt-1">
+      <div class="mt-1 text-sm sm:text-base">
         {summary}
       </div>
       {(demoUrl || repoUrl) && 

@@ -1,123 +1,110 @@
-# Cloudflare Domain Setup Guide
+# Cloudflare Pages Domain Setup for www.vinaygautam.com
 
-## Understanding Cloudflare's Domain Options
+## Issue: 522 Error on www.vinaygautam.com
 
-When setting up a custom domain in Cloudflare Pages, you'll see options for domain management. Here's what each means:
+A 522 error means Cloudflare Pages cannot reach your deployment. This is typically because the domain isn't properly connected.
 
-### Option 1: Transfer Domain to Cloudflare (Full Transfer)
-- **What it does**: Moves your domain registration from your current registrar to Cloudflare
-- **When to use**: If you want to manage everything in one place
-- **Note**: This is **NOT required** for Cloudflare Pages to work
+## Solution: Connect www.vinaygautam.com to Cloudflare Pages
 
-### Option 2: Use Cloudflare DNS Only (Recommended)
-- **What it does**: Keeps your domain at your current registrar, but uses Cloudflare's DNS servers
-- **When to use**: Most common setup - you keep your domain where it is
-- **Benefits**: 
-  - Keep your domain at your current registrar
-  - Still get Cloudflare's CDN and security features
-  - Works perfectly with Cloudflare Pages
+### Step 1: Add Custom Domain in Cloudflare Pages
 
-## Recommended Setup: Use Cloudflare DNS Only
+1. **Go to Cloudflare Dashboard**
+   - Navigate to [dash.cloudflare.com](https://dash.cloudflare.com/)
+   - Click on **"Workers & Pages"** in the sidebar
+   - Select your portfolio project
 
-### Step 1: Add Domain to Cloudflare (DNS Only)
-
-1. **In Cloudflare Dashboard**
-   - Go to **"Workers & Pages"** → Your project → **"Custom domains"**
+2. **Add Custom Domain**
+   - Click on **"Custom domains"** tab
    - Click **"Set up a custom domain"**
-   - Enter: `vinaygautam.com`
-   - When prompted about domain transfer, **choose "Add DNS only"** or **"Skip transfer"**
+   - Enter: `www.vinaygautam.com`
+   - Click **"Continue"**
 
-2. **If Cloudflare asks to add the domain**
-   - Go to Cloudflare Dashboard → **"Websites"** (left sidebar)
-   - Click **"Add a site"**
-   - Enter: `vinaygautam.com`
-   - Select **"Free"** plan (or paid if you prefer)
-   - Cloudflare will scan your current DNS records
+3. **Verify DNS Records**
+   - Cloudflare will show you the DNS records needed
+   - Make sure you have a CNAME record:
+     - **Name**: `www`
+     - **Target**: Your Cloudflare Pages URL (e.g., `your-project.pages.dev`)
+     - **Proxy status**: Proxied (orange cloud)
 
-### Step 2: Update Nameservers at Your Registrar
+### Step 2: Set Up Redirect from non-www to www
 
-Cloudflare will provide you with nameservers (usually something like):
+Since `_redirects` file doesn't work for cross-domain redirects in Cloudflare Pages, use one of these methods:
+
+#### Option A: Cloudflare Page Rules (Recommended)
+
+1. **Go to Cloudflare Dashboard**
+   - Select your domain `vinaygautam.com`
+   - Go to **"Rules"** → **"Page Rules"**
+
+2. **Create a Page Rule**
+   - Click **"Create Page Rule"**
+   - **URL**: `vinaygautam.com/*`
+   - **Setting**: "Forwarding URL"
+   - **Status Code**: 301 - Permanent Redirect
+   - **Destination URL**: `https://www.vinaygautam.com/$1`
+   - Click **"Save and Deploy"**
+
+#### Option B: Add Both Domains to Pages
+
+1. **Add both domains to Cloudflare Pages**
+   - Add `vinaygautam.com` (without www)
+   - Add `www.vinaygautam.com`
+   - Set `www.vinaygautam.com` as the primary domain
+
+2. **Use Cloudflare Redirect Rules**
+   - Go to **"Rules"** → **"Redirect Rules"**
+   - Create a redirect from `vinaygautam.com/*` to `https://www.vinaygautam.com/$1` with 301 status
+
+### Step 3: Verify SSL/TLS Settings
+
+1. **Go to SSL/TLS Settings**
+   - In Cloudflare Dashboard, select your domain
+   - Go to **"SSL/TLS"** → **"Overview"**
+   - Set encryption mode to **"Full"** or **"Full (strict)"**
+
+2. **Check SSL Certificate**
+   - Go to **"SSL/TLS"** → **"Edge Certificates"**
+   - Ensure "Always Use HTTPS" is enabled
+   - Ensure "Automatic HTTPS Rewrites" is enabled
+
+### Step 4: Verify DNS Records
+
+Make sure you have these DNS records:
+
 ```
-ns1.cloudflare.com
-ns2.cloudflare.com
+Type    Name    Content                    Proxy
+CNAME   www     your-project.pages.dev     Proxied (orange cloud)
+A       @       (your server IP if needed) Proxied
 ```
 
-1. **Go to your domain registrar** (where you bought vinaygautam.com)
-   - Common registrars: Namecheap, GoDaddy, Google Domains, etc.
-   - Log in to your account
+### Step 5: Wait for Propagation
 
-2. **Find DNS/Nameserver settings**
-   - Look for: "DNS Management", "Nameservers", or "DNS Settings"
-   - This is usually in the domain management section
+- DNS changes can take a few minutes to propagate
+- SSL certificate provisioning can take up to 24 hours
+- Check the status in Cloudflare Pages dashboard
 
-3. **Update nameservers**
-   - Replace your current nameservers with Cloudflare's nameservers
-   - Save changes
+### Troubleshooting
 
-4. **Wait for propagation**
-   - DNS changes can take 24-48 hours (usually much faster, often within minutes)
-   - You can check status in Cloudflare dashboard
+1. **Check Deployment Status**
+   - Go to Cloudflare Pages dashboard
+   - Verify your latest deployment is successful
+   - Check build logs for any errors
 
-### Step 3: Configure DNS Records in Cloudflare
+2. **Check Domain Status**
+   - In Cloudflare Pages, go to "Custom domains"
+   - Verify `www.vinaygautam.com` shows as "Active"
+   - If it shows "Pending", wait for DNS/SSL propagation
 
-Once nameservers are updated, Cloudflare will manage your DNS:
+3. **Test Direct Access**
+   - Try accessing your Pages URL directly: `https://your-project.pages.dev`
+   - If this works but the custom domain doesn't, it's a DNS/domain issue
 
-1. **In Cloudflare Dashboard** → **"DNS"** section
-2. **Add/Verify records**:
-   - **A record** or **CNAME** for root domain (`@` or `vinaygautam.com`)
-   - **CNAME** for `www` subdomain (if you want www.vinaygautam.com)
-   
-3. **For Cloudflare Pages**, Cloudflare usually auto-configures:
-   - A CNAME record pointing to your Pages project
-   - This happens automatically when you add the custom domain
+4. **Clear Cache**
+   - In Cloudflare Dashboard, go to **"Caching"** → **"Configuration"**
+   - Click **"Purge Everything"** to clear cache
 
-### Step 4: SSL/TLS Configuration
+## Important Notes
 
-1. **In Cloudflare Dashboard** → **"SSL/TLS"**
-2. **Set encryption mode to "Full"** or **"Full (strict)"**
-3. Cloudflare will automatically provision SSL certificates
-4. Wait a few minutes for certificate to be issued
-
-## Alternative: If Domain is Already on Cloudflare
-
-If `vinaygautam.com` is already registered with Cloudflare:
-
-1. **Skip the domain transfer step**
-2. **Just add the custom domain** in Cloudflare Pages
-3. **DNS will be automatically configured**
-4. **SSL certificate will be auto-provisioned**
-
-## Quick Checklist
-
-- [ ] Add domain to Cloudflare (DNS only, not full transfer)
-- [ ] Update nameservers at your registrar
-- [ ] Wait for DNS propagation (check in Cloudflare dashboard)
-- [ ] Verify SSL/TLS is set to "Full"
-- [ ] Test site at `https://vinaygautam.com`
-
-## Troubleshooting
-
-### "Domain not resolving"
-- Check that nameservers are correctly updated at registrar
-- Wait for DNS propagation (can take up to 48 hours)
-- Verify DNS records in Cloudflare dashboard
-
-### "SSL certificate pending"
-- Ensure SSL/TLS mode is set to "Full" or "Full (strict)"
-- Wait 10-15 minutes for certificate provisioning
-- Check that DNS is properly configured
-
-### "Domain already in use"
-- If domain is already added to another Cloudflare account, you'll need to remove it first
-- Or use the existing Cloudflare account
-
-## Need Help?
-
-- **Cloudflare Support**: [community.cloudflare.com](https://community.cloudflare.com/)
-- **Cloudflare Docs**: [developers.cloudflare.com/pages](https://developers.cloudflare.com/pages/)
-
----
-
-**Remember**: You don't need to transfer your domain to Cloudflare. Just use Cloudflare's DNS by updating your nameservers at your current registrar.
-
-
+- The `_redirects` file in the `public` folder only works for path-based redirects within the same domain
+- For domain redirects (non-www to www), use Cloudflare Page Rules or Redirect Rules
+- Make sure both domains are added to Cloudflare Pages if you want to redirect between them

@@ -14,43 +14,42 @@ export async function GET(context: Context) {
 
   items.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
 
-  // Render all items in parallel
-  const renderedItems = await Promise.all(
-    items.map(async (item) => {
-      const { Content } = await item.render()
-      const content = Content.toString()
-      // Strip HTML tags for description, limit to 300 chars
-      const textContent = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
-      const description = textContent.length > 300 
-        ? textContent.substring(0, 300) + '...' 
-        : textContent
+  // Limit to most recent 20 items for better performance
+  const recentItems = items.slice(0, 20)
 
-      return {
-        title: item.data.title,
-        description: item.data.summary || description,
-        pubDate: item.data.date,
-        link: `${context.site}${item.collection === "blog" ? `/blog/${item.slug}` : `/projects/${item.slug}`}`,
-        author: SITE.AUTHOR,
-        categories: item.data.tags || [],
-        content: content,
-      }
-    })
-  )
+  // Process items for RSS feed
+  const renderedItems = recentItems.map((item) => {
+    // Use summary if available, otherwise use a default description
+    let description = item.data.summary || ""
+    
+    // If no summary, create a simple description from title
+    if (!description) {
+      description = `Read more about ${item.data.title}`
+    }
+
+    // Ensure description is properly formatted and not too long
+    if (description.length > 500) {
+      description = description.substring(0, 500) + '...'
+    }
+
+    // Format the link properly
+    const link = `${context.site}${item.collection === "blog" ? `/blog/${item.slug}` : `/projects/${item.slug}`}`
+
+    return {
+      title: item.data.title,
+      description: description,
+      pubDate: item.data.date,
+      link: link,
+      author: SITE.AUTHOR,
+      categories: item.data.tags || [],
+    }
+  })
 
   return rss({
     title: `${SITE.TITLE} - Blog & Projects`,
     description: SITE.DESCRIPTION,
     site: context.site,
-    items: renderedItems.map((item) => ({
-      ...item,
-      // Ensure proper XML escaping and formatting
-      title: item.title,
-      description: item.description,
-      pubDate: item.pubDate,
-      link: item.link,
-      author: item.author,
-      categories: item.categories,
-    })),
+    items: renderedItems,
     customData: `<language>en-us</language>
       <copyright>Copyright ${new Date().getFullYear()} ${SITE.AUTHOR}</copyright>
       <managingEditor>${SITE.AUTHOR} (contact@datumint.no)</managingEditor>

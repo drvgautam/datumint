@@ -16,6 +16,7 @@ This directory contains all documentation for the portfolio site.
 - [Domain Setup](deployment/CLOUDFLARE_DOMAIN_SETUP.md) - Domain configuration
 
 ### Troubleshooting
+- [Site Not Opening](troubleshooting/TROUBLESHOOT_SITE_NOT_OPENING.md) - General troubleshooting guide
 - [Fix Redirect Not Working](troubleshooting/FIX_REDIRECT_NOT_WORKING.md)
 - [Fix DNS Record Name](troubleshooting/FIX_DNS_RECORD_NAME.md)
 - [Fix 522 Error](troubleshooting/FIX_522_ERROR.md)

@@ -73,33 +73,52 @@
      - Cloudflare may show you an A record or CNAME flattening option
      - This allows the root domain to be accessible for redirects
 
-3. **Configure DNS Records**:
+3. **Configure DNS Records in Cloudflare**:
    
-   You need **TWO DNS records** for the domain to work properly:
+   **Important**: Since your DNS is managed by Cloudflare (transferred from Namecheap), you need to add the DNS records **directly in Cloudflare's DNS settings**, not in Namecheap.
    
-   **Record 1: CNAME for www subdomain**
-   - Go to Cloudflare Dashboard → Select domain `vinaygautam.com`
-   - Go to **"DNS"** → **"Records"**
-   - Click **"Add record"**
-   - **Type**: `CNAME`
-   - **Name**: `www`
-   - **Target**: Your Cloudflare Pages URL (e.g., `vinaygautam-blog.pages.dev`)
-   - **Proxy status**: Proxied (orange cloud) ✅
-   - Click **"Save"**
+   **Step-by-step for adding CNAME record**:
    
-   **Record 2: A record for root domain (apex)**
-   - Still in DNS Records, click **"Add record"** again
-   - **Type**: `A`
-   - **Name**: `@` (or leave blank - represents root domain)
-   - **IPv4 address**: `192.0.2.1` (this is a placeholder - Cloudflare will handle it)
-   - **Proxy status**: Proxied (orange cloud) ✅
-   - Click **"Save"**
+   a. **Open Cloudflare DNS Settings** (in a new tab or window):
+      - In Cloudflare Dashboard, click on your domain `vinaygautam.com` (from the domain list, not from Pages)
+      - OR go directly to: `https://dash.cloudflare.com/[your-account-id]/[domain-id]/dns`
+      - Click on **"DNS"** in the left sidebar
+      - Click on **"Records"** tab
    
-   **Important Note**: 
-   - The A record for the root domain is needed so that `vinaygautam.com` can be accessed (even if just to redirect to www)
-   - Cloudflare's proxy will handle the actual routing
-   - If Cloudflare shows a specific IP when adding the root domain in Pages, use that instead
-   - Alternatively, Cloudflare may automatically create this record when you add the root domain in Pages
+   b. **Add CNAME Record for www**:
+      - Click **"Add record"** button
+      - **Type**: Select `CNAME` from dropdown
+      - **Name**: Enter `www` (or select `www` from the dropdown if available)
+      - **Target**: Enter `vinaygautam-blog.pages.dev` (the exact value shown in Pages)
+      - **Proxy status**: Make sure it's **Proxied** (orange cloud icon) ✅
+        - If it shows "DNS only" (gray cloud), click the cloud icon to toggle to "Proxied"
+      - **TTL**: Leave as "Auto"
+      - Click **"Save"** button
+   
+   c. **Add A Record for Root Domain** (if adding root domain in Pages):
+      - Still in DNS Records, click **"Add record"** again
+      - **Type**: Select `A` from dropdown
+      - **Name**: Enter `@` (or leave blank - represents root domain `vinaygautam.com`)
+      - **IPv4 address**: 
+        - If Cloudflare Pages showed you a specific IP when adding the root domain, use that
+        - Otherwise, you can use `192.0.2.1` as a placeholder (Cloudflare proxy will handle routing)
+      - **Proxy status**: Make sure it's **Proxied** (orange cloud icon) ✅
+      - **TTL**: Leave as "Auto"
+      - Click **"Save"** button
+   
+   d. **Return to Pages and Verify**:
+      - Go back to your Pages project → **"Custom domains"** tab
+      - Click the **"Check DNS records"** button
+      - Cloudflare will verify the DNS records
+      - Status should change from "Verifying" to "Active" within a few minutes
+   
+   **Note**: 
+   - DNS changes in Cloudflare are usually instant, but verification can take 1-2 minutes
+   - If status remains "Verifying" or "Inactive":
+     - Double-check the CNAME record name is exactly `www` (no trailing dot)
+     - Verify the target matches exactly what Pages shows (e.g., `vinaygautam-blog.pages.dev`)
+     - Ensure proxy status is enabled (orange cloud)
+     - Wait 2-3 minutes and click "Check DNS records" again
 
 4. **SSL/TLS**:
    - Cloudflare will automatically provision an SSL certificate

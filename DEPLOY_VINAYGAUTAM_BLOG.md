@@ -78,17 +78,154 @@
 
 ### Step 6: Set Up Redirect (non-www to www)
 
-1. **Go to Cloudflare Dashboard**:
-   - Select your domain `vinaygautam.com`
-   - Go to **"Rules"** → **"Redirect Rules"** (or **"Page Rules"**)
+Cloudflare offers two methods for redirects. **Redirect Rules** (recommended) is the newer, more flexible option. If it's not available, use **Page Rules**.
 
-2. **Create Redirect Rule**:
-   - Click **"Create rule"**
-   - **Name**: `Redirect non-www to www`
-   - **If**: `vinaygautam.com/*`
-   - **Then**: `https://www.vinaygautam.com/$1`
-   - **Status code**: `301 - Permanent Redirect`
-   - Click **"Deploy"**
+#### Option A: Using Redirect Rules (Recommended - Newer Method)
+
+1. **Navigate to Redirect Rules**:
+   - In Cloudflare Dashboard, select your domain `vinaygautam.com`
+   - In the left sidebar, click **"Rules"**
+   - Click on **"Redirect Rules"** (under the Rules section)
+   - If you don't see "Redirect Rules", you may need to use Page Rules (see Option B below)
+
+2. **Create a New Redirect Rule**:
+   - Click the **"Create rule"** button (usually at the top right)
+   - You'll see a form with several fields
+
+3. **Configure the Rule**:
+   
+   **Rule Name** (optional but recommended):
+   - Enter: `Redirect non-www to www`
+   - This helps you identify the rule later
+   
+   **If the incoming request matches**:
+   - Select **"Custom filter expression"** or **"URL path"** depending on what's available
+   - Enter the condition: `(http.host eq "vinaygautam.com")`
+     - This matches requests to `vinaygautam.com` (without www)
+   - OR if using a simpler interface, select:
+     - **Hostname**: `vinaygautam.com`
+     - **Path**: Leave empty or set to `/*` to match all paths
+   
+   **Then the action is**:
+   - Select **"Redirect"** or **"Dynamic redirect"**
+   - **Status code**: Select `301 - Permanent Redirect`
+   - **Destination URL**: Enter `https://www.vinaygautam.com/$1`
+     - The `$1` captures the path and query string
+   - OR if there's a dropdown, select:
+     - **Redirect to**: `https://www.vinaygautam.com`
+     - **Preserve path**: Yes/Enabled
+     - **Preserve query string**: Yes/Enabled
+
+4. **Deploy the Rule**:
+   - Review your settings
+   - Click **"Deploy"** or **"Save"** button
+   - The rule will be active immediately
+
+5. **Verify the Rule**:
+   - You should see the rule listed in the Redirect Rules page
+   - Test by visiting `http://vinaygautam.com` (should redirect to `https://www.vinaygautam.com`)
+   - Test with a path: `http://vinaygautam.com/blog` (should redirect to `https://www.vinaygautam.com/blog`)
+
+#### Option B: Using Page Rules (Legacy Method)
+
+If Redirect Rules are not available in your Cloudflare plan, use Page Rules:
+
+1. **Navigate to Page Rules**:
+   - In Cloudflare Dashboard, select your domain `vinaygautam.com`
+   - In the left sidebar, click **"Rules"**
+   - Click on **"Page Rules"**
+
+2. **Create a New Page Rule**:
+   - Click **"Create Page Rule"** button
+
+3. **Configure the URL Pattern**:
+   - In the **"If the URL matches"** field, enter:
+     ```
+     vinaygautam.com/*
+     ```
+   - This matches all URLs on `vinaygautam.com` (without www)
+   - Note: Don't include `http://` or `https://` in the pattern
+
+4. **Set the Action**:
+   - Click **"Add a Setting"** or look for **"Then the settings are"** section
+   - Select **"Forwarding URL"**
+   - Choose **"301 - Permanent Redirect"**
+   - Enter the destination URL:
+     ```
+     https://www.vinaygautam.com/$1
+     ```
+   - The `$1` preserves the path (e.g., `/blog` becomes `/blog`)
+
+5. **Save the Rule**:
+   - Click **"Save and Deploy"**
+   - Page Rules are free for the first 3 rules, then require a paid plan
+
+6. **Verify the Rule**:
+   - The rule appears in your Page Rules list
+   - Test by visiting `http://vinaygautam.com` (should redirect)
+   - Note: Page Rules can take a few minutes to propagate
+
+#### Detailed Example Configuration
+
+**For Redirect Rules (Option A)**:
+```
+Rule Name: Redirect non-www to www
+Condition: (http.host eq "vinaygautam.com")
+Action: Dynamic redirect
+Status Code: 301
+Destination: https://www.vinaygautam.com${http.request.uri.path}${http.request.uri.query}
+```
+
+**For Page Rules (Option B)**:
+```
+URL Pattern: vinaygautam.com/*
+Setting: Forwarding URL
+Status Code: 301 - Permanent Redirect
+Destination: https://www.vinaygautam.com/$1
+```
+
+#### Testing the Redirect
+
+After setting up the rule, test it:
+
+1. **Test root domain**:
+   - Visit: `http://vinaygautam.com`
+   - Should redirect to: `https://www.vinaygautam.com`
+   - Check browser address bar shows the www version
+
+2. **Test with path**:
+   - Visit: `http://vinaygautam.com/blog`
+   - Should redirect to: `https://www.vinaygautam.com/blog`
+   - Path should be preserved
+
+3. **Test with query string**:
+   - Visit: `http://vinaygautam.com/blog?page=1`
+   - Should redirect to: `https://www.vinaygautam.com/blog?page=1`
+   - Query string should be preserved
+
+4. **Check HTTP status**:
+   - Use a tool like `curl` or browser dev tools
+   - Should return `301 Moved Permanently`
+   - Location header should be `https://www.vinaygautam.com/...`
+
+#### Troubleshooting Redirect Rules
+
+**Redirect not working?**
+- Wait 1-2 minutes for propagation (especially Page Rules)
+- Clear browser cache or use incognito mode
+- Check rule is active/enabled in the dashboard
+- Verify DNS is using Cloudflare (orange cloud icon)
+- Check rule order (Redirect Rules are processed in order)
+
+**Infinite redirect loop?**
+- Make sure the destination URL is different from the source
+- Don't redirect `www.vinaygautam.com` to itself
+- Check for conflicting rules
+
+**Path not preserved?**
+- Verify you're using `$1` or `${http.request.uri.path}` correctly
+- For Page Rules, ensure the pattern includes `/*`
+- For Redirect Rules, check the expression syntax
 
 ### Step 7: Verify Deployment
 

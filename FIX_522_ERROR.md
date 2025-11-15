@@ -4,9 +4,10 @@
 - ✅ `https://vinaygautam-blog.pages.dev` works fine
 - ❌ `https://www.vinaygautam.com` gives 522 error
 - DNS status shows "Active"
+- **Important**: Domain `vinaygautam.com` (root) was transferred from Namecheap to Cloudflare
 
 ## Root Cause
-The custom domain isn't properly connected to the Pages deployment, even though DNS is correct.
+The custom domain isn't properly connected to the Pages deployment, even though DNS is correct. Since the root domain is the primary domain in Cloudflare, the `www` subdomain needs special handling.
 
 ## Solution Steps
 
@@ -56,13 +57,22 @@ If the domain shows "Active" but still gives 522 error:
 
 1. **Go to DNS → Records**:
    - Check the CNAME record for `www`
-   - **Target should be exactly**: `vinaygautam-blog.pages.dev`
+   - **Name should be exactly**: `www` (not `www.vinaygautam.com`)
+   - **Target should be exactly**: `vinaygautam-blog.pages.dev` (no trailing dot)
    - **Proxy status**: Proxied (orange cloud) ✅
 
-2. **If target is different**:
-   - Edit the record
-   - Change target to: `vinaygautam-blog.pages.dev`
+2. **If target is different or missing**:
+   - Edit the record (or create new if missing)
+   - **Type**: `CNAME`
+   - **Name**: `www` (just `www`, not the full domain)
+   - **Target**: `vinaygautam-blog.pages.dev`
+   - **Proxy**: Proxied (orange cloud) ✅
    - Save
+
+3. **Important for transferred domains**:
+   - Since `vinaygautam.com` is the primary domain in Cloudflare
+   - The `www` subdomain is just `www` in the Name field
+   - Cloudflare automatically appends the root domain
 
 ### Step 4: Check SSL Certificate
 

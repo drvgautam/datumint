@@ -2,7 +2,7 @@
 company: "NTNU, Trondheim"
 role: "Researcher and Software Engineer"
 dateStart: "10/01/2021"
-dateEnd: "Present"
+dateEnd: "12/31/2024"
 ---
 
 * Designed and deployed scalable **REST APIs** (FastAPI) for integration with modelling and simulation systems.

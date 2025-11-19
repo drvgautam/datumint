@@ -124,7 +124,7 @@ It can be deployed on any static hosting provider that supports HTML/CSS/JS outp
 ```bash
 npm run build    # generates /dist
 ```
-Deploy the contents of the dist/ directory to your hosting provider of choice.
+
 ---
 
 ## 📄 Documentation

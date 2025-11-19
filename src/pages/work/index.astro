@@ -7,7 +7,13 @@ import { WORK } from "@consts"
 
 const collection = await getCollection("work")
 
-collection.sort((a, b) => new Date(b.data.dateStart).getTime() - new Date(a.data.dateStart).getTime())
+collection.sort((a, b) => {
+  // Transition section always first
+  if (a.data.isTransition) return -1
+  if (b.data.isTransition) return 1
+  // Then sort by date (newest first)
+  return new Date(b.data.dateStart).getTime() - new Date(a.data.dateStart).getTime()
+})
 
 const work = await Promise.all(
   collection.map(async (item) => {
@@ -26,6 +32,12 @@ function formatWorkDate(input: Date | string) {
   const year = new Date(input).getFullYear()
   return `${month} ${year}`
 }
+
+function formatDateRange(start: Date | string, end: Date | string) {
+  const startStr = typeof start === "string" ? start : formatWorkDate(start)
+  const endStr = typeof end === "string" ? end : formatWorkDate(end)
+  return `${startStr} — ${endStr}`
+}
 ---
 
 <PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
@@ -37,23 +49,61 @@ function formatWorkDate(input: Date | string) {
   <BottomLayout>
     <ul>
       { 
-        work.filter(entry => entry.data.company !== 'IIIT Allahabad, India').map((entry, idx) => (
-          <li class="animate border-b border-black/10 dark:border-white/25 mt-4 py-8 first-of-type:mt-0 first-of-type:pt-0 last-of-type:border-none">
-            <div class="text-black dark:text-white font-semibold text-lg mb-1">
-              {entry.data.role}
-            </div>
-            <div class="text-base text-gray-700 dark:text-gray-300 mb-2">
-              {entry.data.company}
-            </div>
-            <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">
-              {idx === 0 && '2021-2024'}{idx === 1 && '2017-2021'}{idx === 2 && '2010-2017'}
-            </div>
-            <article class="prose dark:prose-invert">
-              <entry.Content />
-            </article>
-          </li>
-        ))
+        work.map((entry) => {
+          const isTransition = entry.data.isTransition || false
+          const dateRange = formatDateRange(entry.data.dateStart, entry.data.dateEnd)
+          
+          return (
+            <li class={`animate border-b border-black/10 dark:border-white/25 mt-4 py-8 first-of-type:mt-0 first-of-type:pt-0 last-of-type:border-none ${isTransition ? 'bg-gray-50 dark:bg-gray-900/50 rounded-lg px-6 -mx-6 mb-6' : ''}`}>
+              {isTransition ? (
+                <div class="text-black dark:text-white font-bold text-xl mb-2">
+                  {entry.data.role}
+                </div>
+              ) : (
+                <div class="text-black dark:text-white font-semibold text-lg mb-1">
+                  {entry.data.role}
+                </div>
+              )}
+              <div class="text-base text-gray-700 dark:text-gray-300 mb-2">
+                {entry.data.company}
+              </div>
+              <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-4">
+                {dateRange}
+              </div>
+              <article class="prose dark:prose-invert max-w-none">
+                <entry.Content />
+              </article>
+            </li>
+          )
+        })
       }
     </ul>
+    
+    <!-- Skills Section -->
+    <div class="animate mt-12 pt-8 border-t border-black/10 dark:border-white/25">
+      <h2 class="text-2xl font-bold text-black dark:text-white mb-6">Skills & Tools</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="font-semibold text-lg text-black dark:text-white mb-2">DevOps / Cloud</h3>
+          <p class="text-gray-700 dark:text-gray-300">Kubernetes, Docker, Linux, CI/CD, GitHub Actions, Cloudflare, Nginx</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg text-black dark:text-white mb-2">Programming</h3>
+          <p class="text-gray-700 dark:text-gray-300">Python, TypeScript, Bash, FastAPI, Node.js</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg text-black dark:text-white mb-2">Data & Graph</h3>
+          <p class="text-gray-700 dark:text-gray-300">Neo4j, PostgreSQL, RDF, SPARQL, R2RML, ETL pipelines</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg text-black dark:text-white mb-2">AI & LLMs</h3>
+          <p class="text-gray-700 dark:text-gray-300">GenAI tooling, context-aware RAG systems, semantic data engineering</p>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg text-black dark:text-white mb-2">Other</h3>
+          <p class="text-gray-700 dark:text-gray-300">Homelab architectures, monitoring (Prometheus), automation, modelling tools</p>
+        </div>
+      </div>
+    </div>
   </BottomLayout>
 </PageLayout>

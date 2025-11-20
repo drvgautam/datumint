@@ -9,13 +9,10 @@ import { SITE } from "@consts"
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
-const { title, description, image = "/og-image-v2.jpeg" } = Astro.props
+const { title, description, image = "/og-vinay-profile.jpeg" } = Astro.props
 
-// Construct full image URL with cache-busting parameter
-// This forces social media platforms to fetch a fresh image
-const imageUrl = new URL(image, Astro.site)
-imageUrl.searchParams.set('v', '3') // Increment version to bust cache
-const ogImage = imageUrl.href
+// Construct full image URL - using completely new filename to force cache refresh
+const ogImage = new URL(image, Astro.site).href
 const isHomePage = Astro.url.pathname === "/"
 ---
 
